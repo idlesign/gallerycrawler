@@ -16,8 +16,8 @@ Description
 *Generic crawling for galleries*
 
 1. Crawler starts from gallery listing URL;
-2. It visits every details page on current listing page;
-3. It gather information from details page.
+2. It visits every details page mentioned on current listing page;
+3. It gathers information from each details page;
 4. It moves to the next listing URL.
 5. Etc.
 

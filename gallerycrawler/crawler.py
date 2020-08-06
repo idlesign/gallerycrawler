@@ -19,8 +19,10 @@ class Crawler:
     selector_details_img_small: str = '.thumbnail'
     selector_details_author: str = '.author'
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, *, probe: bool = False):
         self.url = url
+        self.probe = probe
+        self._stop = False
 
         LOGGER.info(f'Start crawling from: {url} ...')
 
@@ -116,12 +118,17 @@ class Crawler:
 
     def _walk(self, url: str) -> Generator[PageDetails, None, None]:
 
+        probe = self.probe
         get = self._get_response
         get_details = self._get_details
 
         page_listing = get(url)
 
-        for page_details_link in self._get_page_details_links(page_listing):
+        for idx, page_details_link in enumerate(self._get_page_details_links(page_listing)):
+
+            if probe and idx > 0:
+                break
+
             page_details_link = urljoin(url, page_details_link)
 
             LOGGER.debug(f'Processing details page: {page_details_link} ...')
@@ -139,9 +146,13 @@ class Crawler:
 
         page_next_link = self._get_page_listing_next_link(page_listing)
 
-        if page_next_link:
+        if page_next_link and not self._stop:
             page_next_link = urljoin(url, page_next_link)
             LOGGER.debug(f'Processing next listing page: {page_next_link} ...')
+
+            if probe:
+                self._stop = True
+
             yield from self._walk(page_next_link)
 
     def results(self) -> Generator[PageDetails, None, None]:

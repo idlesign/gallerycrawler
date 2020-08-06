@@ -6,9 +6,15 @@ from .page_details import PageDetails  # noqa
 from .utils import setup_logging  # noqa
 
 
-def dump(*, crawler: Type['Crawler'], url: str, fpath: str):
+def dump(
+        *,
+        crawler: Type['Crawler'],
+        url: str,
+        fpath: str,
+        probe: bool = False
+):
 
-    crawler = crawler(url)
+    crawler = crawler(url, probe=probe)
 
     pages = []
 

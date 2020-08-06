@@ -6,8 +6,9 @@ from .page_details import PageDetails
 
 class HtmlExporter:
 
-    def __init__(self, pages: List[PageDetails]):
+    def __init__(self, *, pages: List[PageDetails], title: str = ''):
         self.pages = pages
+        self.title = title
 
     def save(self, fpath: Path):
 
@@ -31,7 +32,12 @@ class HtmlExporter:
                 '</tr>'
             )
 
-        compiled = TPL.replace('{rows}', '\n'.join(lines))
+        compiled = TPL.replace(
+            '{rows}', '\n'.join(lines), 1
+
+        ).replace(
+            '{title}', self.title or 'gallerycrawler dump', 1
+        )
 
         with open(str(fpath), 'w') as f:
             f.write(compiled)
@@ -45,7 +51,7 @@ TPL = '''
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
     
-    <title>gallerycrawler dump</title>
+    <title>{title}</title>
 </head>
 <body>
 

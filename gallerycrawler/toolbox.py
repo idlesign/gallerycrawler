@@ -23,12 +23,14 @@ def dump(
     for idx, page in enumerate(crawler_obj.results(), 1):
         pages.append(page)
 
+    crawler_name = crawler.__name__
+
     if not fpath:
-        fpath = f'{crawler.__name__}.html'
+        fpath = f'{crawler_name}.html'
 
     fpath = Path(fpath).absolute()
 
-    exporter = HtmlExporter(pages)
+    exporter = HtmlExporter(pages=pages, title=crawler_name)
     exporter.save(fpath)
 
     if show:

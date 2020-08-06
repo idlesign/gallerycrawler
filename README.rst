@@ -29,10 +29,10 @@ Description
     class MyCrawler(Crawler):
 
         selector_listing_next: str = '.page-next a'
+        selector_listing_thumbnails: str = '.thumbnail img'
         selector_details: str = '.page-details a'
         selector_details_title: str = '.page-title'
         selector_details_img: str = '.image img'
-        selector_details_img_small: str = '.thumb img'
         selector_details_author: str = '.image-author'
 
     # Run dumping.

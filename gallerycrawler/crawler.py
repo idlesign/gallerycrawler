@@ -180,7 +180,7 @@ class Crawler:
 
         page_next_link = self._get_page_listing_next_link(page_listing)
 
-        if page_next_link and not self._stop:
+        if details_links and page_next_link and not self._stop:
             self._page_listing_count += 1
 
             page_next_link = urljoin(url, page_next_link)

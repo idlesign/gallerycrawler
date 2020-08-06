@@ -12,7 +12,8 @@ def dump(
         crawler: Type['Crawler'],
         url: str,
         fpath: Union[str, Path],
-        probe: bool = False
+        probe: bool = False,
+        show: bool = True,
 ):
 
     crawler = crawler(url, probe=probe)
@@ -26,3 +27,7 @@ def dump(
 
     exporter = HtmlExporter(pages)
     exporter.save(fpath)
+
+    if show:
+        import webbrowser
+        webbrowser.open(f'file://{fpath}', new=2)

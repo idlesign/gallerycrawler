@@ -39,5 +39,6 @@ Description
     dump(
         crawler=MyCrawler,
         url='https://mysite.some/gallery/',
-        fpath='dumped.html'
+        fpath='dumped.html',
+        probe=True,  # Use this to quick test your crawler
     )

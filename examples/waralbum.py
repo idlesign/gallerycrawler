@@ -6,15 +6,14 @@ from gallerycrawler.toolbox import Crawler, PageDetails, dump, setup_logging
 class WaralbumCrawler(Crawler):
 
     selector_listing_next: str = '.wp-pagenavi .nextpostslink'
-    selector_details: str = '#archive .clearfloat a'
-    selector_details_img_small: str = '.entry img'
+    selector_details: str = '#archive .title a'
+    selector_listing_thumbnails: str = '#archive .thumbnail'
 
     def _get_details(self, page_details: BeautifulSoup) -> PageDetails:
 
         get_href = self._get_href
 
         title = page_details.select_one('meta[property="og:title"]').attrs['content']
-        img_small = self._get_details_img_small(page_details)
 
         img_author = ''
         img_orig = ''
@@ -34,7 +33,7 @@ class WaralbumCrawler(Crawler):
             title=title,
             img_author=img_author,
             img_orig=img_orig,
-            thumbnail=img_small,
+            thumbnail='',
         )
 
         return details
@@ -48,5 +47,5 @@ if __name__ == '__main__':
     dump(
         crawler=WaralbumCrawler,
         url='https://waralbum.ru/?s=%D0%BD%D1%8E%D1%80%D0%BD%D0%B1%D0%B5%D1%80%D0%B3&x=0&y=0',
-        fpath='waralbum.html'
+        fpath='waralbum.html',
     )

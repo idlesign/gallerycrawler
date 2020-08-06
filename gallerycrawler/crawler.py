@@ -23,6 +23,9 @@ class Crawler:
     def __init__(self, url: str, *, probe: bool = False):
         self.url = url
         self.probe = probe
+
+        self._page_details_count = 0
+        self._page_listing_count = 0
         self._stop = False
 
         LOGGER.info(f'Start crawling from: {url} ...')
@@ -152,8 +155,9 @@ class Crawler:
                 break
 
             page_details_link = urljoin(url, page_details_link)
+            self._page_details_count += 1
 
-            LOGGER.debug(f'Processing details page: {page_details_link} ...')
+            LOGGER.debug(f'Processing details page #{self._page_details_count}: {page_details_link} ...')
 
             page_details = get(page_details_link)
 
@@ -177,8 +181,10 @@ class Crawler:
         page_next_link = self._get_page_listing_next_link(page_listing)
 
         if page_next_link and not self._stop:
+            self._page_listing_count += 1
+
             page_next_link = urljoin(url, page_next_link)
-            LOGGER.debug(f'Processing next listing page: {page_next_link} ...')
+            LOGGER.debug(f'Processing next listing page #{self._page_listing_count}: {page_next_link} ...')
 
             if probe:
                 self._stop = True

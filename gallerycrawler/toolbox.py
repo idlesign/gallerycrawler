@@ -1,4 +1,5 @@
-from typing import Type
+from pathlib import Path
+from typing import Type, Union
 
 from .crawler import Crawler  # noqa
 from .exporter import HtmlExporter  # noqa
@@ -10,7 +11,7 @@ def dump(
         *,
         crawler: Type['Crawler'],
         url: str,
-        fpath: str,
+        fpath: Union[str, Path],
         probe: bool = False
 ):
 
@@ -20,6 +21,8 @@ def dump(
 
     for idx, page in enumerate(crawler.results(), 1):
         pages.append(page)
+
+    fpath = Path(fpath).absolute()
 
     exporter = HtmlExporter(pages)
     exporter.save(fpath)

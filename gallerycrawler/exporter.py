@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 
 from .page_details import PageDetails
@@ -8,7 +9,7 @@ class HtmlExporter:
     def __init__(self, pages: List[PageDetails]):
         self.pages = pages
 
-    def save(self, fpath: str):
+    def save(self, fpath: Path):
 
         lines = []
 
@@ -32,7 +33,7 @@ class HtmlExporter:
 
         compiled = TPL.replace('{rows}', '\n'.join(lines))
 
-        with open(fpath, 'w') as f:
+        with open(str(fpath), 'w') as f:
             f.write(compiled)
 
 

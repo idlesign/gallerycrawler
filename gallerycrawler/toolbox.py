@@ -11,17 +11,20 @@ def dump(
         *,
         crawler: Type['Crawler'],
         url: str,
-        fpath: Union[str, Path],
+        fpath: Union[str, Path] = '',
         probe: bool = False,
         show: bool = True,
 ):
 
-    crawler = crawler(url, probe=probe)
+    crawler_obj = crawler(url, probe=probe)
 
     pages = []
 
-    for idx, page in enumerate(crawler.results(), 1):
+    for idx, page in enumerate(crawler_obj.results(), 1):
         pages.append(page)
+
+    if not fpath:
+        fpath = f'{crawler.__name__}.html'
 
     fpath = Path(fpath).absolute()
 

@@ -47,5 +47,4 @@ if __name__ == '__main__':
     dump(
         crawler=WaralbumCrawler,
         url='https://waralbum.ru/?s=%D0%BD%D1%8E%D1%80%D0%BD%D0%B1%D0%B5%D1%80%D0%B3&x=0&y=0',
-        fpath='waralbum.html',
     )

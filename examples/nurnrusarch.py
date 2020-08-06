@@ -19,5 +19,4 @@ if __name__ == '__main__':
     dump(
         crawler=NurnRusarchCrawler,
         url='http://nurnberg.rusarchives.ru/documents-list?field_archive_tid=All&field_full_title_value=&field_carrier_tid=40&field_date_sort_value%5Bvalue%5D%5Bdate%5D=&field_date_sort_value2%5Bvalue%5D%5Bdate%5D=',
-        fpath='nurnrusarch.html',
     )

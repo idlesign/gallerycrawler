@@ -19,5 +19,4 @@ if __name__ == '__main__':
     dump(
         crawler=JacksonCrawler,
         url='https://www.roberthjackson.org/collection/photos/',
-        fpath='jackson.html',
     )

@@ -18,5 +18,4 @@ if __name__ == '__main__':
     dump(
         crawler=TrumanCrawler,
         url='https://www.trumanlibrary.gov/search?keys=nurnberg&op=Search&types%5Bphotograph_record%5D=photograph_record',
-        fpath='truman.html',
     )

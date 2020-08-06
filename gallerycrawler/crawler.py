@@ -13,7 +13,7 @@ LOGGER = logging.getLogger(__name__)
 class Crawler:
 
     selector_listing_next: str = '.next'
-    selector_listing_thumbnails: str = '.item.thumbnail'
+    selector_listing_thumbnails: str = '.thumbnail'
     selector_details: str = '.details'
     selector_details_title: str = 'h1'
     selector_details_img: str = 'img'
@@ -58,7 +58,10 @@ class Crawler:
     def _get_src(self, element: Optional[Tag]) -> str:
 
         if element:
-            return element.attrs['src']
+            src = element.attrs.get('src')
+            srcset = element.attrs.get('srcset')
+
+            return src or srcset
 
         return ''
 
@@ -163,7 +166,7 @@ class Crawler:
             except IndexError:
                 thumbnail = ''
 
-            details.thumbnail = thumbnail or details.thumbnail
+            details.thumbnail = thumbnail or details.thumbnail or details.img_orig
 
             for attr in {'img_orig', 'thumbnail'}:
                 val = getattr(details, attr)

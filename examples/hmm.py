@@ -21,3 +21,9 @@ if __name__ == '__main__':
         url='https://collections.ushmm.org/search/?f%5Bf_cities%5D%5B%5D=Nuremberg&f%5Bf_images%5D%5B%5D=indiv_photographs&f%5Bf_key_event%5D%5B%5D=imt_nuremberg&per_page=50&q=nurnberg&search_field=Subjects+and+Keywords&sort=rg_number_sort+asc',
         fpath='hmm-photo.html',
     )
+
+    dump(
+        crawler=HmmCrawler,
+        url='https://collections.ushmm.org/search/?f%5Bavailability%5D%5B%5D=digitized&f%5Bf_audiovisual%5D%5B%5D=historic_film&f%5Bf_cities%5D%5B%5D=Nuremberg&f%5Bf_key_event%5D%5B%5D=imt_nuremberg&per_page=50&q=nurnberg&search_field=Subjects+and+Keywords&sort=rg_number_sort+asc',
+        fpath='hmm-video.html',
+    )

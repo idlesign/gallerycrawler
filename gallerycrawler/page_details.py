@@ -7,13 +7,13 @@ class PageDetails:
             title: str,
             img_author: str,
             img_orig: str,
-            img_small: str,
+            thumbnail: str,
             url: str = ''
     ):
         self.title = title
         self.img_author = img_author
         self.img_orig = img_orig
-        self.img_small = img_small
+        self.thumbnail = thumbnail
         self.url = url
 
     def __str__(self):

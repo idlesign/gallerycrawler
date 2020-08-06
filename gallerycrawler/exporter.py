@@ -27,7 +27,7 @@ class HtmlExporter:
                 f'<div id="author-{idx}">{author}</div>'
                 f"{btn_copy if author else ''}"
                 f'<td><a href="{page.img_orig}">'
-                f'<img src="{page.img_small}" class="img-thumbnail" width="300"></a></td>'
+                f'<img src="{page.thumbnail}" class="img-thumbnail" width="300"></a></td>'
                 '</tr>'
             )
 

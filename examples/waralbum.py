@@ -34,7 +34,7 @@ class WaralbumCrawler(Crawler):
             title=title,
             img_author=img_author,
             img_orig=img_orig,
-            img_small=img_small,
+            thumbnail=img_small,
         )
 
         return details

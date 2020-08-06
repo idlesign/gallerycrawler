@@ -1,5 +1,5 @@
 import logging
-from typing import Set, Generator, Optional
+from typing import Generator, Optional, List
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup, Tag
@@ -13,10 +13,11 @@ LOGGER = logging.getLogger(__name__)
 class Crawler:
 
     selector_listing_next: str = '.next'
+    selector_listing_thumbnails: str = '.item.thumbnail'
     selector_details: str = '.details'
     selector_details_title: str = 'h1'
     selector_details_img: str = 'img'
-    selector_details_img_small: str = '.thumbnail'
+    selector_details_img_small: str = ''
     selector_details_author: str = '.author'
 
     def __init__(self, url: str, *, probe: bool = False):
@@ -70,7 +71,7 @@ class Crawler:
 
         return ''
 
-    def _get_page_details_links(self, page_listing: BeautifulSoup) -> Set[str]:
+    def _get_page_details_links(self, page_listing: BeautifulSoup) -> List[str]:
 
         pages_details_links = []
 
@@ -80,7 +81,17 @@ class Crawler:
             if link:
                 pages_details_links.append(link)
 
-        return set(pages_details_links)
+        return pages_details_links
+
+    def _get_listing_thumbnails(self, page: BeautifulSoup) -> List[str]:
+
+        get_url = self._get_img_url
+        result = []
+
+        for candidate in page.select(self.selector_listing_thumbnails):
+            result.append(get_url(candidate))
+
+        return result
 
     def _get_details_title(self, page: BeautifulSoup) -> str:
         return self._get_text(page.select_one(self.selector_details_title))
@@ -92,7 +103,10 @@ class Crawler:
         return self._get_img_url(page.select_one(self.selector_details_img))
 
     def _get_details_img_small(self, page: BeautifulSoup) -> str:
-        return self._get_img_url(page.select_one(self.selector_details_img_small))
+        selector = self.selector_details_img_small
+        if not selector:
+            return ''
+        return self._get_img_url(page.select_one(selector))
 
     def _get_details(self, page_details: BeautifulSoup) -> PageDetails:
 
@@ -101,14 +115,11 @@ class Crawler:
         img_orig = self._get_details_img(page_details)
         img_author = self._get_details_author(page_details)
 
-        img_small = img_small or img_orig
-        img_orig = img_orig or img_small
-
         details = PageDetails(
             title=title,
             img_author=img_author,
             img_orig=img_orig,
-            img_small=img_small,
+            thumbnail=img_small,
         )
 
         return details
@@ -124,7 +135,15 @@ class Crawler:
 
         page_listing = get(url)
 
-        for idx, page_details_link in enumerate(self._get_page_details_links(page_listing)):
+        thumbnails = self._get_listing_thumbnails(page_listing)
+        details_links = self._get_page_details_links(page_listing)
+
+        thumbnails_match = len(thumbnails) == len(details_links)
+
+        if not thumbnails_match:
+            LOGGER.warning(f'Thumbnails number does not match details pages number!')
+
+        for idx, page_details_link in enumerate(details_links):
 
             if probe and idx > 0:
                 break
@@ -138,7 +157,15 @@ class Crawler:
             details = get_details(page_details)
             details.url = page_details_link
 
-            for attr in {'img_orig', 'img_small'}:
+            try:
+                thumbnail = thumbnails[idx]
+
+            except IndexError:
+                thumbnail = ''
+
+            details.thumbnail = thumbnail or details.thumbnail
+
+            for attr in {'img_orig', 'thumbnail'}:
                 val = getattr(details, attr)
                 setattr(details, attr, urljoin(page_details_link, val))
 
